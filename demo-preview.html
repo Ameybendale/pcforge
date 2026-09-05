@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PCFORGE — Exploded Scroll Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0b;
+    --bg-alt:#111113;
+    --panel:#18181b;
+    --panel-2:#1e1e22;
+    --border:#2b2b30;
+    --steel:#55555e;
+    --silver:#a9a9b3;
+    --offwhite:#eeeef1;
+    --white:#fafafb;
+    --glow:rgba(200,205,220,.14);
+    --mono: 'JetBrains Mono', monospace;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--offwhite);
+    font-family:var(--body);
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--offwhite); color:var(--bg);}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 5vw;
+    background:linear-gradient(180deg, rgba(10,10,11,.9), rgba(10,10,11,0));
+    backdrop-filter:blur(6px);
+  }
+  .logo{
+    font-family:var(--display); font-weight:700; font-size:20px; letter-spacing:.5px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .logo .dot{width:8px;height:8px;background:var(--offwhite);border-radius:50%;display:inline-block;}
+  .navlinks{display:flex; gap:36px; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--silver);}
+  .navlinks span{cursor:pointer; transition:color .2s;}
+  .navlinks span:hover{color:var(--white);}
+  .cart-pill{
+    border:1px solid var(--border); padding:8px 16px; border-radius:100px;
+    font-family:var(--mono); font-size:12px; color:var(--offwhite);
+  }
+
+  /* ---------- HERO / EXPLODE SECTION ---------- */
+  .hero-wrap{ position:relative; height:420vh; }
+  .hero-pin{
+    position:sticky; top:0; height:100vh; width:100%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(255,255,255,.05), transparent 60%),
+      linear-gradient(180deg, #0a0a0b 0%, #101012 100%);
+  }
+  .grid-bg{
+    position:absolute; inset:0; opacity:.35;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(ellipse at 50% 45%, black 40%, transparent 78%);
+  }
+  .eyebrow{
+    position:absolute; top:130px; left:50%; transform:translateX(-50%);
+    font-family:var(--mono); font-size:12px; letter-spacing:.2em; color:var(--steel);
+    text-transform:uppercase; text-align:center;
+  }
+  .eyebrow b{color:var(--silver);}
+  .headline{
+    position:absolute; top:165px; left:50%; transform:translateX(-50%);
+    font-family:var(--display); font-weight:700; font-size:clamp(32px,5vw,64px);
+    text-align:center; line-height:1.05; letter-spacing:-.01em;
+    color:var(--white);
+  }
+  .headline .sub{
+    display:block; font-family:var(--body); font-weight:400; font-size:15px;
+    color:var(--silver); margin-top:14px; letter-spacing:0;
+  }
+
+  .rig{ position:relative; width:640px; height:640px; max-width:78vw; max-height:56vh; }
+  .part{ position:absolute; will-change:transform,opacity; }
+  .part svg{ display:block; overflow:visible; }
+  .label{
+    position:absolute; display:flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:11.5px; color:var(--silver);
+    opacity:0; white-space:nowrap;
+  }
+  .label .tick{width:22px; height:1px; background:var(--steel);}
+  .label b{color:var(--white); font-weight:500;}
+
+  .scroll-cue{
+    position:absolute; bottom:44px; left:50%; transform:translateX(-50%);
+    font-family:var(--mono); font-size:11px; color:var(--steel);
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    letter-spacing:.15em; text-transform:uppercase;
+  }
+  .scroll-cue .line{width:1px; height:34px; background:linear-gradient(var(--steel), transparent); position:relative; overflow:hidden;}
+  .scroll-cue .line::after{content:'';position:absolute; top:-100%; left:0; width:100%; height:100%; background:var(--offwhite); animation:drip 1.6s infinite;}
+  @keyframes drip{ to{ top:100%; } }
+
+  .progress-rail{
+    position:absolute; right:5vw; top:50%; transform:translateY(-50%);
+    width:2px; height:180px; background:var(--border); z-index:5;
+  }
+  .progress-fill{ position:absolute; top:0; left:0; width:100%; height:0%; background:var(--offwhite); }
+
+  /* ---------- SECTIONS BELOW ---------- */
+  section{ padding:120px 6vw; }
+  .section-head{ display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:48px; gap:24px; flex-wrap:wrap;}
+  .section-head h2{ font-family:var(--display); font-weight:600; font-size:clamp(26px,3vw,38px); }
+  .section-head p{ color:var(--steel); font-family:var(--mono); font-size:12.5px; max-width:320px; text-align:right;}
+
+  .cat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); }
+  .cat{
+    background:var(--bg); padding:38px 26px; position:relative; transition:background .25s;
+    min-height:190px; display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .cat:hover{ background:var(--panel); }
+  .cat .n{ font-family:var(--mono); font-size:11px; color:var(--steel); }
+  .cat h3{ font-family:var(--display); font-size:20px; font-weight:600; }
+  .cat .count{ font-family:var(--mono); font-size:11px; color:var(--silver); }
+
+  .prod-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+  .card{ border:1px solid var(--border); background:var(--panel); padding:22px; transition:transform .25s, border-color .25s; }
+  .card:hover{ transform:translateY(-4px); border-color:var(--steel); }
+  .card .shot{ height:150px; display:flex; align-items:center; justify-content:center; margin-bottom:18px; }
+  .card h4{ font-family:var(--display); font-size:15px; font-weight:600; margin-bottom:6px; }
+  .card .spec{ font-family:var(--mono); font-size:11px; color:var(--steel); margin-bottom:14px; }
+  .card .row{ display:flex; justify-content:space-between; align-items:center; }
+  .price{ font-family:var(--mono); font-size:15px; color:var(--white); }
+  .addbtn{ font-family:var(--mono); font-size:11px; letter-spacing:.05em; border:1px solid var(--border); background:transparent; color:var(--offwhite); padding:7px 12px; cursor:pointer; transition:.2s; }
+  .addbtn:hover{ background:var(--offwhite); color:var(--bg); }
+
+  footer{ padding:60px 6vw; border-top:1px solid var(--border); font-family:var(--mono); font-size:11px; color:var(--steel); display:flex; justify-content:space-between; }
+
+  @media(max-width:860px){
+    .cat-grid, .prod-grid{ grid-template-columns:repeat(2,1fr); }
+    .navlinks{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><span class="dot"></span>PCFORGE</div>
+  <div class="navlinks"><span>Build</span><span>Components</span><span>Prebuilt</span><span>Support</span></div>
+  <div class="cart-pill">CART (0)</div>
+</nav>
+
+<div class="hero-wrap" id="heroWrap">
+  <div class="hero-pin">
+    <div class="grid-bg"></div>
+    <div class="eyebrow">PCFORGE / <b>COMPONENT ARCHIVE</b> / SCROLL TO EXPAND</div>
+    <div class="headline">Every part.<br>Precisely placed.
+      <span class="sub">Scroll to break the build down to its bare components.</span>
+    </div>
+
+    <div class="rig" id="rig">
+      <!-- Cabinet frame (base, stays put, faint) -->
+      <div class="part" id="p-case" style="left:50%; top:50%; transform:translate(-50%,-50%);">
+        <svg width="360" height="420" viewBox="0 0 360 420" fill="none">
+          <rect x="4" y="4" width="352" height="412" rx="10" stroke="#33333a" stroke-width="2"/>
+          <rect x="4" y="4" width="70" height="412" rx="10" stroke="#33333a" stroke-width="1.2"/>
+          <circle cx="39" cy="40" r="10" stroke="#33333a" stroke-width="1.2"/>
+        </svg>
+      </div>
+
+      <!-- Motherboard -->
+      <div class="part" id="p-mobo" style="left:50%; top:50%; transform:translate(-50%,-50%);">
+        <svg width="240" height="280" viewBox="0 0 240 280" fill="none">
+          <rect x="1" y="1" width="238" height="278" rx="4" fill="#141417" stroke="#3a3a42" stroke-width="1.5"/>
+          <rect x="18" y="18" width="52" height="52" rx="2" stroke="#55555e"/>
+          <line x1="18" y1="90" x2="90" y2="90" stroke="#2b2b30"/>
+          <line x1="18" y1="100" x2="90" y2="100" stroke="#2b2b30"/>
+          <line x1="18" y1="110" x2="90" y2="110" stroke="#2b2b30"/>
+          <rect x="150" y="18" width="70" height="18" fill="none" stroke="#2b2b30"/>
+          <rect x="150" y="44" width="70" height="18" fill="none" stroke="#2b2b30"/>
+        </svg>
+      </div>
+
+      <!-- CPU -->
+      <div class="part" id="p-cpu" style="left:50%; top:50%; transform:translate(-50%,-50%);">
+        <svg width="70" height="70" viewBox="0 0 70 70" fill="none">
+          <rect x="2" y="2" width="66" height="66" rx="3" fill="#1c1c1f" stroke="#c9c9d0" stroke-width="1.4"/>
+          <rect x="16" y="16" width="38" height="38" fill="none" stroke="#55555e"/>
+          <path d="M35 2V-2M35 68v4M2 35H-2M68 35h4" stroke="#55555e"/>
+        </svg>
+      </div>
+
+      <!-- GPU -->
+      <div class="part" id="p-gpu" style="left:50%; top:50%; transform:translate(-50%,-50%);">
+        <svg width="260" height="100" viewBox="0 0 260 100" fill="none">
+          <rect x="1" y="1" width="258" height="70" rx="4" fill="#161619" stroke="#3a3a42" stroke-width="1.5"/>
+          <circle cx="60" cy="36" r="26" stroke="#55555e" stroke-width="1.2"/>
+          <circle cx="150" cy="36" r="26" stroke="#55555e" stroke-width="1.2"/>
+          <path d="M60 14v44M38 36h44" stroke="#33333a"/>
+          <path d="M150 14v44M128 36h44" stroke="#33333a"/>
+          <rect x="1" y="74" width="60" height="10" fill="#1c1c1f" stroke="#3a3a42"/>
+        </svg>
+      </div>
+
+      <!-- RAM x2 -->
+      <div class="part" id="p-ram1" style="left:50%; top:50%; transform:translate(-50%,-50%);">
+        <svg width="18" height="140" viewBox="0 0 18 140" fill="none">
+          <rect x="1" y="1" width="16" height="138" fill="#18181b" stroke="#9a9aa3" stroke-width="1.2"/>
+          <line x1="1" y1="30" x2="17" y2="30" stroke="#3a3a42"/>
+        </svg>
+      </div>
+      <div class="part" id="p-ram2" style="left:50%; top:50%; transform:translate(-50%,-50%);">
+        <svg width="18" height="140" viewBox="0 0 18 140" fill="none">
+          <rect x="1" y="1" width="16" height="138" fill="#18181b" stroke="#9a9aa3" stroke-width="1.2"/>
+          <line x1="1" y1="30" x2="17" y2="30" stroke="#3a3a42"/>
+        </svg>
+      </div>
+
+      <!-- SSD -->
+      <div class="part" id="p-ssd" style="left:50%; top:50%; transform:translate(-50%,-50%);">
+        <svg width="90" height="35" viewBox="0 0 90 35" fill="none">
+          <rect x="1" y="1" width="88" height="33" rx="3" fill="#161619" stroke="#55555e" stroke-width="1.2"/>
+          <rect x="8" y="9" width="26" height="17" fill="none" stroke="#33333a"/>
+        </svg>
+      </div>
+
+      <!-- PSU -->
+      <div class="part" id="p-psu" style="left:50%; top:50%; transform:translate(-50%,-50%);">
+        <svg width="150" height="90" viewBox="0 0 150 90" fill="none">
+          <rect x="1" y="1" width="148" height="88" rx="3" fill="#141417" stroke="#3a3a42" stroke-width="1.5"/>
+          <circle cx="75" cy="45" r="28" stroke="#55555e" stroke-width="1.2"/>
+          <circle cx="75" cy="45" r="4" fill="#55555e"/>
+        </svg>
+      </div>
+
+      <!-- Cooler -->
+      <div class="part" id="p-cool" style="left:50%; top:50%; transform:translate(-50%,-50%);">
+        <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="48" stroke="#c9c9d0" stroke-width="1.4"/>
+          <circle cx="50" cy="50" r="10" fill="#1c1c1f" stroke="#9a9aa3"/>
+          <g stroke="#55555e">
+            <line x1="50" y1="6" x2="50" y2="30"/>
+            <line x1="50" y1="70" x2="50" y2="94"/>
+            <line x1="6" y1="50" x2="30" y2="50"/>
+            <line x1="70" y1="50" x2="94" y2="50"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Labels -->
+      <div class="label" id="l-case"><span class="tick"></span><b>Cabinet</b>&nbsp;— ATX Mid Tower</div>
+      <div class="label" id="l-mobo"><span class="tick"></span><b>Motherboard</b>&nbsp;— ATX / DDR5</div>
+      <div class="label" id="l-cpu"><span class="tick"></span><b>CPU</b>&nbsp;— 8-core / 5.4GHz</div>
+      <div class="label" id="l-gpu"><span class="tick"></span><b>GPU</b>&nbsp;— 16GB GDDR6X</div>
+      <div class="label" id="l-ram"><span class="tick"></span><b>RAM</b>&nbsp;— 32GB DDR5 6000</div>
+      <div class="label" id="l-ssd"><span class="tick"></span><b>SSD</b>&nbsp;— 2TB NVMe Gen4</div>
+      <div class="label" id="l-psu"><span class="tick"></span><b>PSU</b>&nbsp;— 850W Gold</div>
+      <div class="label" id="l-cool"><span class="tick"></span><b>Cooler</b>&nbsp;— 240mm AIO</div>
+    </div>
+
+    <div class="progress-rail"><div class="progress-fill" id="progFill"></div></div>
+    <div class="scroll-cue"><span>Scroll</span><div class="line"></div></div>
+  </div>
+</div>
+
+<section id="categories">
+  <div class="section-head">
+    <h2>Shop by component</h2>
+    <p>// EVERY CATEGORY, STOCKED AND BENCHMARKED IN-HOUSE</p>
+  </div>
+  <div class="cat-grid">
+    <div class="cat"><span class="n">01</span><h3>Processors</h3><span class="count">86 items</span></div>
+    <div class="cat"><span class="n">02</span><h3>Graphics Cards</h3><span class="count">54 items</span></div>
+    <div class="cat"><span class="n">03</span><h3>Memory</h3><span class="count">112 items</span></div>
+    <div class="cat"><span class="n">04</span><h3>Storage</h3><span class="count">97 items</span></div>
+    <div class="cat"><span class="n">05</span><h3>Motherboards</h3><span class="count">68 items</span></div>
+    <div class="cat"><span class="n">06</span><h3>Power Supplies</h3><span class="count">41 items</span></div>
+    <div class="cat"><span class="n">07</span><h3>Cabinets</h3><span class="count">33 items</span></div>
+    <div class="cat"><span class="n">08</span><h3>Cooling</h3><span class="count">59 items</span></div>
+  </div>
+</section>
+
+<section id="featured">
+  <div class="section-head">
+    <h2>Featured components</h2>
+    <p>// HAND-PICKED FOR PRICE-TO-PERFORMANCE</p>
+  </div>
+  <div class="prod-grid">
+    <div class="card">
+      <div class="shot"><svg width="90" height="90" viewBox="0 0 90 90"><rect x="2" y="2" width="86" height="86" rx="4" fill="none" stroke="#55555e"/><circle cx="45" cy="45" r="30" stroke="#9a9aa3"/></svg></div>
+      <h4>Vertex RTX 4080S</h4>
+      <div class="spec">16GB GDDR6X · 2610MHz</div>
+      <div class="row"><span class="price">$949</span><button class="addbtn">ADD</button></div>
+    </div>
+    <div class="card">
+      <div class="shot"><svg width="90" height="90" viewBox="0 0 90 90"><rect x="10" y="10" width="70" height="70" fill="none" stroke="#9a9aa3"/><rect x="26" y="26" width="38" height="38" fill="none" stroke="#55555e"/></svg></div>
+      <h4>Core X9-14900</h4>
+      <div class="spec">24-core · up to 5.8GHz</div>
+      <div class="row"><span class="price">$589</span><button class="addbtn">ADD</button></div>
+    </div>
+    <div class="card">
+      <div class="shot"><svg width="90" height="90" viewBox="0 0 90 90"><rect x="30" y="6" width="30" height="78" fill="none" stroke="#9a9aa3"/></svg></div>
+      <h4>PulseDDR 32GB Kit</h4>
+      <div class="spec">DDR5 · 6400MHz CL32</div>
+      <div class="row"><span class="price">$139</span><button class="addbtn">ADD</button></div>
+    </div>
+    <div class="card">
+      <div class="shot"><svg width="90" height="90" viewBox="0 0 90 90"><rect x="8" y="30" width="74" height="30" rx="3" fill="none" stroke="#9a9aa3"/></svg></div>
+      <h4>NovaDrive 2TB</h4>
+      <div class="spec">NVMe Gen4 · 7300MB/s</div>
+      <div class="row"><span class="price">$149</span><button class="addbtn">ADD</button></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© PCFORGE — COMPONENT ARCHIVE</span>
+  <span>BUILT WITH REACT + EXPRESS + MONGODB</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// target explode offsets (x,y in px from center) and rotation
+const layout = {
+  'p-case': {x:0,   y:0,   r:0,   scale:1,   z:1},
+  'p-mobo': {x:-190,y:-10, r:-4,  scale:1,   z:2},
+  'p-cpu':  {x:-190,y:-160,r:-10, scale:1,   z:3},
+  'p-gpu':  {x:220, y:40,  r:5,   scale:1,   z:3},
+  'p-ram1': {x:-40, y:-230,r:-8,  scale:1,   z:3},
+  'p-ram2': {x:10,  y:-230,r:8,   scale:1,   z:3},
+  'p-ssd':  {x:230, y:-190,r:6,   scale:1,   z:3},
+  'p-psu':  {x:-40, y:250, r:0,   scale:1,   z:2},
+  'p-cool': {x:250, y:220, r:-6,  scale:1,   z:3},
+};
+const labelPos = {
+  'l-case':{x:0,y:130}, 'l-mobo':{x:-260,y:-10}, 'l-cpu':{x:-260,y:-190},
+  'l-gpu':{x:300,y:40}, 'l-ram':{x:-30,y:-300}, 'l-ssd':{x:300,y:-190},
+  'l-psu':{x:-40,y:330}, 'l-cool':{x:320,y:220}
+};
+
+Object.keys(layout).forEach(id=>{
+  document.getElementById(id).style.zIndex = layout[id].z;
+});
+
+const tl = gsap.timeline({
+  scrollTrigger:{
+    trigger:"#heroWrap",
+    start:"top top",
+    end:"bottom bottom",
+    scrub:0.6,
+    onUpdate: self => { document.getElementById('progFill').style.height = (self.progress*100)+'%'; }
+  }
+});
+
+tl.to({}, {duration:0.15}); // tiny hold at assembled state
+
+Object.entries(layout).forEach(([id,cfg])=>{
+  tl.to(`#${id}`, {
+    x: cfg.x, y: cfg.y, rotation: cfg.r,
+    duration: 1, ease:"power2.out"
+  }, "<0.02");
+});
+
+Object.entries(labelPos).forEach(([id,cfg])=>{
+  tl.to(`#${id}`, {
+    opacity:1, x: cfg.x, y: cfg.y, duration:0.6, ease:"power1.out"
+  }, "<0.1");
+});
+
+// headline fade as explosion begins
+gsap.to(".headline, .eyebrow", {
+  opacity:0, y:-30, ease:"none",
+  scrollTrigger:{ trigger:"#heroWrap", start:"12% top", end:"32% top", scrub:true }
+});
+
+// slight parallax drift on the whole rig for depth
+gsap.to("#rig", {
+  scale:1.05,
+  scrollTrigger:{ trigger:"#heroWrap", start:"top top", end:"bottom bottom", scrub:1 }
+});
+</script>
+</body>
+</html>

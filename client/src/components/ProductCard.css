@@ -1,0 +1,70 @@
+.prod-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.card {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  padding: 22px;
+  transition: transform 0.25s, border-color 0.25s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--steel);
+}
+
+.card .shot {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.card h4 {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.card .spec {
+  font-size: 11px;
+  color: var(--steel);
+  margin-bottom: 14px;
+}
+
+.card .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  font-size: 15px;
+  color: var(--white);
+}
+
+.addbtn {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--offwhite);
+  padding: 7px 12px;
+  transition: 0.2s;
+}
+
+.addbtn:hover {
+  background: var(--offwhite);
+  color: var(--bg);
+}
+
+@media (max-width: 860px) {
+  .prod-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

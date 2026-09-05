@@ -1,0 +1,144 @@
+.cart-page {
+  padding-top: 140px;
+  padding-bottom: 100px;
+  min-height: 70vh;
+}
+
+.cart-page h1 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(28px, 3.4vw, 40px);
+  margin-bottom: 40px;
+}
+
+.empty-cart {
+  color: var(--steel);
+  font-size: 13px;
+}
+
+.cart-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border);
+}
+
+.cart-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 110px 90px 90px;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cart-thumb {
+  width: 46px;
+  height: 46px;
+}
+
+.cart-name {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cart-name a {
+  font-family: var(--display);
+  font-size: 14.5px;
+  font-weight: 500;
+}
+
+.cart-name a:hover {
+  color: var(--silver);
+}
+
+.cart-name .brand {
+  font-size: 10.5px;
+  color: var(--steel);
+}
+
+.cart-qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  width: fit-content;
+}
+
+.cart-qty button {
+  background: none;
+  border: none;
+  color: var(--offwhite);
+  width: 28px;
+  height: 32px;
+}
+
+.cart-qty span {
+  width: 26px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.cart-price {
+  font-size: 13px;
+  color: var(--white);
+}
+
+.cart-remove {
+  background: none;
+  border: none;
+  color: var(--steel);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  text-align: right;
+}
+
+.cart-remove:hover {
+  color: var(--offwhite);
+}
+
+.cart-summary {
+  max-width: 340px;
+  margin-left: auto;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.summary-row.muted {
+  color: var(--steel);
+  font-size: 11.5px;
+}
+
+.checkout-btn {
+  margin-top: 10px;
+  background: var(--offwhite);
+  color: var(--bg);
+  border: none;
+  padding: 16px;
+  font-size: 12.5px;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.checkout-btn:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 700px) {
+  .cart-row {
+    grid-template-columns: 44px 1fr;
+    grid-template-areas: "thumb name" "qty price" ". remove";
+    row-gap: 8px;
+  }
+  .cart-summary {
+    max-width: none;
+  }
+}

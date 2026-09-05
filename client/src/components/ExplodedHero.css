@@ -1,0 +1,168 @@
+.hero-wrap {
+  position: relative;
+  height: 420vh;
+}
+
+.hero-pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 130px;
+  background: radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.05), transparent 60%),
+    linear-gradient(180deg, #0a0a0b 0%, #101012 100%);
+}
+
+.grid-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at 50% 45%, black 40%, transparent 78%);
+}
+
+/* text now sits in NORMAL FLOW above the rig — never overlaps it */
+.hero-text {
+  position: relative;
+  z-index: 6;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--steel);
+  text-transform: uppercase;
+}
+
+.hero-eyebrow b {
+  color: var(--silver);
+}
+
+.hero-headline {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(30px, 4.4vw, 58px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--white);
+  margin-top: 14px;
+}
+
+.hero-headline .sub {
+  display: block;
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--silver);
+  margin-top: 14px;
+  letter-spacing: 0;
+}
+
+/* rig gets the remaining vertical space, centered within it */
+.rig-wrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.rig {
+  position: relative;
+  width: 800px;
+  height: 760px;
+  max-width: 90vw;
+  max-height: 62vh;
+}
+
+.part {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
+.part svg {
+  display: block;
+  overflow: visible;
+}
+
+#p-case {
+  z-index: 1;
+}
+#p-mobo,
+#p-psu {
+  z-index: 2;
+}
+#p-cpu,
+#p-gpu,
+#p-ram1,
+#p-ram2,
+#p-ssd,
+#p-cool {
+  z-index: 3;
+}
+
+.label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--silver);
+  opacity: 0;
+  white-space: nowrap;
+  z-index: 4;
+}
+
+.label .tick {
+  width: 22px;
+  height: 1px;
+  background: var(--steel);
+}
+
+.label b {
+  color: var(--white);
+  font-weight: 500;
+}
+
+.progress-rail {
+  position: absolute;
+  right: 5vw;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 180px;
+  background: var(--border);
+  z-index: 5;
+}
+
+.progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: var(--offwhite);
+}
+
+@media (max-width: 860px) {
+  .progress-rail {
+    display: none;
+  }
+  .rig {
+    height: 68vh;
+  }
+}

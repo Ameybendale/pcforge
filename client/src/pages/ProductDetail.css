@@ -1,0 +1,160 @@
+.detail-page {
+  padding-top: 140px;
+  padding-bottom: 100px;
+  min-height: 70vh;
+}
+
+.detail-loading {
+  padding-top: 180px;
+  text-align: center;
+  color: var(--steel);
+  min-height: 60vh;
+}
+
+.breadcrumb {
+  font-size: 11.5px;
+  color: var(--steel);
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.breadcrumb a:hover {
+  color: var(--silver);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+}
+
+.detail-visual {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 420px;
+}
+
+.brand-tag {
+  color: var(--steel);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.detail-info h1 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(26px, 3vw, 36px);
+  margin: 10px 0 14px;
+}
+
+.rating {
+  color: var(--silver);
+  font-size: 13px;
+  margin-bottom: 22px;
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.price-big {
+  font-size: 28px;
+  color: var(--white);
+}
+
+.price-old {
+  font-size: 15px;
+  color: var(--steel);
+  text-decoration: line-through;
+}
+
+.desc {
+  color: var(--silver);
+  line-height: 1.6;
+  margin-bottom: 28px;
+  font-size: 14.5px;
+}
+
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 32px;
+  font-size: 12.5px;
+}
+
+.specs-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--silver);
+}
+
+.specs-table td:first-child {
+  color: var(--steel);
+  width: 40%;
+}
+
+.buy-row {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+}
+
+.qty-control button {
+  background: none;
+  border: none;
+  color: var(--offwhite);
+  width: 38px;
+  height: 44px;
+  font-size: 16px;
+}
+
+.qty-control button:hover {
+  background: var(--panel-2);
+}
+
+.qty-control span {
+  width: 34px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.add-cart-btn {
+  flex: 1;
+  background: var(--offwhite);
+  color: var(--bg);
+  border: none;
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.add-cart-btn:hover {
+  opacity: 0.85;
+}
+
+.stock {
+  font-size: 11.5px;
+  color: var(--steel);
+}
+
+@media (max-width: 860px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}

@@ -1,0 +1,102 @@
+.shop-page {
+  padding-top: 140px;
+  padding-bottom: 100px;
+  min-height: 70vh;
+}
+
+.shop-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.shop-head h1 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(28px, 3.4vw, 40px);
+}
+
+.sort-select {
+  background: var(--panel);
+  color: var(--offwhite);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  font-size: 12px;
+}
+
+.shop-body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 40px;
+}
+
+.shop-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 12.5px;
+  color: var(--steel);
+  border-right: 1px solid var(--border);
+  padding-right: 20px;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.shop-filters a {
+  transition: color 0.2s;
+}
+
+.shop-filters a:hover {
+  color: var(--silver);
+}
+
+.shop-filters a.active {
+  color: var(--white);
+}
+
+.empty-state {
+  color: var(--steel);
+  font-size: 13px;
+  padding: 60px 0;
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+  margin-top: 40px;
+  justify-content: center;
+}
+
+.pagination button {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--silver);
+  padding: 8px 12px;
+  font-size: 11px;
+}
+
+.pagination button.active {
+  background: var(--offwhite);
+  color: var(--bg);
+  border-color: var(--offwhite);
+}
+
+@media (max-width: 860px) {
+  .shop-body {
+    grid-template-columns: 1fr;
+  }
+  .shop-filters {
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding-right: 0;
+    padding-bottom: 20px;
+    position: static;
+  }
+}
